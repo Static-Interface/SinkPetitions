@@ -6,7 +6,7 @@ import de.static_interface.sinklibrary.database.annotation.ForeignKey;
 
 public class PetitionRow implements Row {
 
-	@Column
+	@Column(autoIncrement = true, primaryKey = true)
 	public Integer ID;
 
 	@Column
@@ -16,7 +16,7 @@ public class PetitionRow implements Row {
 	public Long creationTimestamp;
 
 	@Column
-	@ForeignKey(table = RankTable.class, column = "ID")
-	public Integer FK_rank;
+	@ForeignKey(table = GroupTable.class, column = "ID")
+	public Integer FK_group;
 
 }

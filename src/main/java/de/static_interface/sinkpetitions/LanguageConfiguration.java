@@ -24,10 +24,10 @@ public class LanguageConfiguration extends Configuration {
 	@Override
 	public void addDefaults() {
 		this.addDefault("SinkPetitions.Vault.NotAvailable", "Vault is not available. Only limited functionality will be provided.");
-		this.addDefault("SinkPetitions.Vault.Available", "Vault is available. You will be able to assign specific ranks to petitions.");
+		this.addDefault("SinkPetitions.Vault.Available", "Vault is available. You will be able to assign specific groups to petitions.");
 
-		this.addDefault("SinkPetitions.Rank.Generic", "General");
-		this.addDefault("SinkPetitions.Rank.NotFound", "Rank ${0} not found!");
+		this.addDefault("SinkPetitions.Group.Generic", "General");
+		this.addDefault("SinkPetitions.Group.NotFound", "Rank ${0} not found!");
 
 		this.addDefault("SinkPetitions.Petition.Create.Group", "Attaching a special group to the petition.");
 

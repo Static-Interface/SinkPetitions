@@ -15,22 +15,22 @@ import de.static_interface.sinklibrary.api.command.annotation.Usage;
 import de.static_interface.sinklibrary.database.query.Query;
 import de.static_interface.sinklibrary.database.query.impl.WhereQuery;
 import de.static_interface.sinklibrary.util.StringUtil;
+import de.static_interface.sinkpetitions.database.GroupRow;
+import de.static_interface.sinkpetitions.database.GroupTable;
 import de.static_interface.sinkpetitions.database.PetitionRow;
 import de.static_interface.sinkpetitions.database.PetitionTable;
-import de.static_interface.sinkpetitions.database.RankRow;
-import de.static_interface.sinkpetitions.database.RankTable;
 
 @Permission("SinkPetitions.Petition.Create")
 @Usage("[-gGroup] <message>")
 public class PetitionCreateCommand extends SinkSubCommand<PetitionCommand> {
 
 	private PetitionTable petitionTable;
-	private RankTable rankTable;
+	private GroupTable groupTable;
 
-	public PetitionCreateCommand(PetitionCommand command, PetitionTable pTable, RankTable rTable) {
+	public PetitionCreateCommand(PetitionCommand command, PetitionTable petitionTable, GroupTable groupTable) {
 		super(command, "create");
-		this.petitionTable = pTable;
-		this.rankTable = rTable;
+		this.petitionTable = petitionTable;
+		this.groupTable = groupTable;
 	}
 
 	@Override
@@ -49,24 +49,24 @@ public class PetitionCreateCommand extends SinkSubCommand<PetitionCommand> {
 
 	@Override
 	protected boolean onExecute(CommandSender sender, String command, String[] parameters) throws ParseException {
-		int rank = -1;
+		int groupId = -1;
 
-		RankRow[] rows;
+		GroupRow[] rows;
 		if (this.getCommandLine().hasOption('g')) {
-			String rankName = this.getCommandLine().getOptionValue('g');
-			WhereQuery<RankRow> rankIdQuery = Query.from(this.rankTable).select().where("rankName", Query.eq("?"));
-			rows = rankIdQuery.getResults(rankName);
+			String groupName = this.getCommandLine().getOptionValue('g');
+			WhereQuery<GroupRow> groupIdQuery = Query.from(this.groupTable).select().where("groupName", Query.eq("?"));
+			rows = groupIdQuery.getResults(groupName);
 			if (rows.length < 1) {
-				sender.sendMessage(StringUtil.format(_("SinkPetitions.Rank.NotFound"), rankName));
+				sender.sendMessage(StringUtil.format(_("SinkPetitions.Rank.NotFound"), groupName));
 			}
 		} else {
-			WhereQuery<RankRow> genericRankIdQuery = Query.from(this.rankTable).select().where("ID", Query.eq("?"));
+			WhereQuery<GroupRow> genericRankIdQuery = Query.from(this.groupTable).select().where("ID", Query.eq("?"));
 			rows = genericRankIdQuery.getResults(1);
 			if (rows.length < 1) {
 				sender.sendMessage(StringUtil.format(_("SinkPetitions.Rank.NotFound"), _("SinkPetitions.Rank.Generic")));
-				throw new IllegalStateException("The generic rank is not available anymore. It is needed to run this plugin.");
+				throw new IllegalStateException("The generic group is not available. It is needed to run this plugin.");
 			}
-			rank = rows[0].ID;
+			groupId = rows[0].ID;
 		}
 
 		StringBuilder stringBuilder = new StringBuilder();
@@ -76,7 +76,7 @@ public class PetitionCreateCommand extends SinkSubCommand<PetitionCommand> {
 		}
 
 		PetitionRow petitionRow = new PetitionRow();
-		petitionRow.FK_rank = rank;
+		petitionRow.FK_group = groupId;
 		petitionRow.text = stringBuilder.toString();
 		petitionRow.creationTimestamp = new Date().getTime();
 		this.petitionTable.insert(petitionRow);

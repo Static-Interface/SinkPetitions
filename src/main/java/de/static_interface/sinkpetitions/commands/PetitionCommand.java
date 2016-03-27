@@ -13,37 +13,37 @@ import de.static_interface.sinklibrary.api.command.annotation.DefaultPermission;
 import de.static_interface.sinklibrary.database.query.Query;
 import de.static_interface.sinklibrary.database.query.impl.SelectQuery;
 import de.static_interface.sinkpetitions.database.PetitionTable;
-import de.static_interface.sinkpetitions.database.RankRow;
-import de.static_interface.sinkpetitions.database.RankTable;
+import de.static_interface.sinkpetitions.database.GroupRow;
+import de.static_interface.sinkpetitions.database.GroupTable;
 
 @Aliases("pe")
 @DefaultPermission
 public class PetitionCommand extends SinkCommand {
 
-	private RankTable rankTable;
+	private GroupTable groupTable;
 	private PetitionTable petitionTable;
 
 	private PetitionCreateCommand petitionCreateCommand;
 
-	public PetitionCommand(Plugin plugin, RankTable rankTable, PetitionTable petitionTable) {
+	public PetitionCommand(Plugin plugin, GroupTable groupTable, PetitionTable petitionTable) {
 		super(plugin);
 
-		this.rankTable = rankTable;
+		this.groupTable = groupTable;
 		this.petitionTable = petitionTable;
 	}
 
 	@Override
 	public void onRegistered() {
 		System.out.println("Registered petition command.");
-		SelectQuery<RankRow> ranks = Query.from(this.rankTable).select();
-		ranks.execute();
-		RankRow[] rankRows = ranks.getResults();
+		SelectQuery<GroupRow> groups = Query.from(this.groupTable).select();
+		groups.execute();
+		GroupRow[] groupRows = groups.getResults();
 
 		List<String> aliases = this.getCommand().getAliases();
 		List<String> newAliases = new ArrayList<String>();
 		for (String alias : aliases) {
-			for (RankRow rankRow : rankRows) {
-				newAliases.add(alias.concat(":").concat(rankRow.rankName));
+			for (GroupRow groupRow : groupRows) {
+				newAliases.add(alias.concat(":").concat(groupRow.groupName));
 			}
 		}
 		this.getCommand().setAliases(newAliases);
@@ -51,7 +51,7 @@ public class PetitionCommand extends SinkCommand {
 			System.out.println(alias);
 		}
 
-		this.petitionCreateCommand = new PetitionCreateCommand(this, this.petitionTable, this.rankTable);
+		this.petitionCreateCommand = new PetitionCreateCommand(this, this.petitionTable, this.groupTable);
 		this.registerSubCommand(this.petitionCreateCommand);
 	}
 

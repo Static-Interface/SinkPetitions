@@ -12,8 +12,9 @@ import de.static_interface.sinklibrary.database.Database;
 import de.static_interface.sinklibrary.database.impl.database.H2Database;
 import de.static_interface.sinklibrary.database.impl.database.MySqlDatabase;
 import de.static_interface.sinkpetitions.commands.PetitionCommand;
+import de.static_interface.sinkpetitions.database.GroupRow;
+import de.static_interface.sinkpetitions.database.GroupTable;
 import de.static_interface.sinkpetitions.database.PetitionTable;
-import de.static_interface.sinkpetitions.database.RankTable;
 
 public class SinkPetitions extends JavaPlugin {
 
@@ -21,7 +22,7 @@ public class SinkPetitions extends JavaPlugin {
 	private DatabaseConfiguration databaseConfiguration;
 
 	private Database database;
-	private RankTable rankTable;
+	private GroupTable groupTable;
 	private PetitionTable petitionTable;
 
 	private PetitionCommand petitionCommand;
@@ -44,7 +45,7 @@ public class SinkPetitions extends JavaPlugin {
 	}
 
 	private void registerCommands() {
-		this.petitionCommand = new PetitionCommand(this, this.rankTable, this.petitionTable);
+		this.petitionCommand = new PetitionCommand(this, this.groupTable, this.petitionTable);
 		SinkLibrary.getInstance().registerCommand("petition", this.petitionCommand);
 	}
 
@@ -66,12 +67,12 @@ public class SinkPetitions extends JavaPlugin {
 		LOGGER.log(Level.CONFIG, "Connecting to database.");
 		this.database.connect();
 		LOGGER.log(Level.CONFIG, "Creating tables...");
-		this.rankTable = new RankTable(this.database);
-		if (!this.rankTable.exists()) {
-			this.rankTable.create();
-			//			RankRow genericRank = new RankRow();
-			//			genericRank.rankName = this.languageConfiguration.get("SinkPetitions.Rank.Generic").toString();
-			//			this.rankTable.insert(genericRank);
+		this.groupTable = new GroupTable(this.database);
+		if (!this.groupTable.exists()) {
+			this.groupTable.create();
+			GroupRow genericRank = new GroupRow();
+			genericRank.groupName = this.languageConfiguration.get("SinkPetitions.Group.Generic").toString();
+			this.groupTable.insert(genericRank);
 		}
 		this.petitionTable = new PetitionTable(this.database);
 		this.petitionTable.create();
