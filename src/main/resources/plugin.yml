@@ -4,9 +4,3 @@ description: A plugin that provides a petition (ticket) management system.
 author: Shadow1Raven
 main: de.static_interface.sinkpetitions.SinkPetitions
 depend: [SinkLibrary]
-
-commands:
-    petition:
-        aliases: [pe]
-        description: Plugin management command
-        usage: /<command>
