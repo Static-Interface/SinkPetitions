@@ -12,7 +12,7 @@ public class DatabaseConfiguration extends Configuration implements DatabaseConn
 
 	public DatabaseConfiguration(Plugin plugin) {
 		super(new File(plugin.getDataFolder(), "database.yml"), true);
-		SinkPetitions.LOGGER.log(Level.INFO, "Loaded database configuration.");
+		SinkPetitions.LOGGER.log(Level.CONFIG, "Loaded database configuration.");
 	}
 
 	@Override

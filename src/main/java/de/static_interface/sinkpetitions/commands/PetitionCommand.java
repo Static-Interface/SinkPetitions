@@ -12,9 +12,9 @@ import de.static_interface.sinklibrary.api.command.annotation.Aliases;
 import de.static_interface.sinklibrary.api.command.annotation.DefaultPermission;
 import de.static_interface.sinklibrary.database.query.Query;
 import de.static_interface.sinklibrary.database.query.impl.SelectQuery;
-import de.static_interface.sinkpetitions.database.PetitionTable;
 import de.static_interface.sinkpetitions.database.GroupRow;
 import de.static_interface.sinkpetitions.database.GroupTable;
+import de.static_interface.sinkpetitions.database.PetitionTable;
 
 @Aliases("pe")
 @DefaultPermission
@@ -24,6 +24,7 @@ public class PetitionCommand extends SinkCommand {
 	private PetitionTable petitionTable;
 
 	private PetitionCreateCommand petitionCreateCommand;
+	private PetitionListCommand petitionListCommand;
 
 	public PetitionCommand(Plugin plugin, GroupTable groupTable, PetitionTable petitionTable) {
 		super(plugin);
@@ -34,7 +35,6 @@ public class PetitionCommand extends SinkCommand {
 
 	@Override
 	public void onRegistered() {
-		System.out.println("Registered petition command.");
 		SelectQuery<GroupRow> groups = Query.from(this.groupTable).select();
 		groups.execute();
 		GroupRow[] groupRows = groups.getResults();
@@ -53,6 +53,9 @@ public class PetitionCommand extends SinkCommand {
 
 		this.petitionCreateCommand = new PetitionCreateCommand(this, this.petitionTable, this.groupTable);
 		this.registerSubCommand(this.petitionCreateCommand);
+
+		this.petitionListCommand = new PetitionListCommand(this, this.petitionTable, this.groupTable);
+		this.registerSubCommand(this.petitionListCommand);
 	}
 
 	@Override

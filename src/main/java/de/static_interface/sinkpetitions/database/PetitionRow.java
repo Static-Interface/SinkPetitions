@@ -15,8 +15,32 @@ public class PetitionRow implements Row {
 	@Column
 	public Long creationTimestamp;
 
+	@Column(keyLength = 36)
+	public String creatorId;
+
 	@Column
 	@ForeignKey(table = GroupTable.class, column = "ID")
 	public Integer FK_group;
+
+	@Column
+	public Boolean isOpen;
+
+	@Column
+	public Double xPosition;
+
+	@Column
+	public Double yPosition;
+
+	@Column
+	public Double zPosition;
+
+	@Column
+	public Double yaw;
+
+	@Column
+	public Double pitch;
+
+	@Column(keyLength = 36)
+	public String worldId;
 
 }
